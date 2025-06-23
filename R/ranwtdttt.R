@@ -20,8 +20,8 @@ NULL
 #' not found in data, the variables are taken from environment(formula),
 #' typically the environment from which wtdttt is called.
 #' @param id the name of the variable that identifies distinct individuals
-#' @param start start of observation window
-#' @param end end of observation window
+#' @param start start of the sampling window within which random index date(s) are sampled
+#' @param end end of the sampling window within which random index date(s) are sampled
 #' @param reverse logical; Fit the reverse waiting time distribution.
 #' @param nsamp number of samples to take.
 #' @param subset an optional vector specifying a subset of observations to be
