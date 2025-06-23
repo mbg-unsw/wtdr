@@ -34,19 +34,24 @@ setMethod("predict", "wtd",
           function(object, prediction.data=NULL, type="dur", iadmean=F, distrx=NULL, quantile=0.8,
                    se.fit=FALSE, na.action=na.pass, ...) {
 
+
       # 07.05.25
       if(is.null(prediction.data)) {
 
         datanew <- data.table(as.data.frame(object@data))
 
+        distrx <- strsplit(object@formula, "~")[[1]][1]
+
       } else {
 
         datanew <- data.table(as.data.frame(prediction.data))
 
+        distrxnew <- datanew[,get(distrx)]
+        distrx <- distrxnew
+
       }
 
-      distrxnew <- datanew[,get(distrx)]
-      distrx <- distrxnew
+
 
       datanew <- na.action(datanew)
       #
