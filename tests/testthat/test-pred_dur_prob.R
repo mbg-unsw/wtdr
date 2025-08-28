@@ -33,13 +33,14 @@ testthat::test_that("predictions", {
     "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(0.1402, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.06040, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1402, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.06040, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.08713, 62), tolerance=0.001)
 
-  # BUG
-  #testthat::expect_equal(v(predict(x, type="prob", distrx=c(0.1402369, 0.06039674))),
-  #                       c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         exp(-exp(x@coef[2])*x@data$t), tolerance=0.001)
+
+
 
   testthat::expect_warning(
     testthat::expect_warning(
@@ -49,12 +50,14 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(0.1168, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.03864, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1168, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.03864, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.03087, 62), tolerance=0.001)
 
-  testthat::expect_equal(v(predict(x, type="prob", distrx=c(0.1168112, 0.03864412))),
-                         c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         exp(-((x@data$t*exp(x@coef[3]))^exp(x@coef[2]))), tolerance=0.001)
+
+
 
   testthat::expect_warning(
     testthat::expect_warning(
@@ -64,13 +67,17 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(0.1348, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.06367, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1348, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.06367, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.09468, 62), tolerance=0.001)
 
-  # BUG
-  #testthat::expect_equal(v(predict(x, type="prob", distrx=c(0.13476, 0.06369762))),
-  #                       c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         pnorm(-(log(x@data$t)-x@coef[2])/exp(x@coef[3])), tolerance=0.001)
+
+
+
+
+
 
   # And for reverse...
 
@@ -84,13 +91,13 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(0.1402, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.06040, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1402, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.06040, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.08713, 62), tolerance=0.001)
 
-  # BUG
-  #testthat::expect_equal(v(predict(x, type="prob", distrx=c(0.1402369, 0.06039674))),
-  #                       c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         exp(-exp(x@coef[2])*x@data$t), tolerance=0.001)
+
 
   testthat::expect_warning(
     testthat::expect_warning(
@@ -100,13 +107,13 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(0.1168, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.03864, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1168, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.03864, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.03087, 62), tolerance=0.001)
 
-#  BUG
-#  testthat::expect_equal(v(predict(x, type="prob", distrx=c(0.1168112, 0.03864412))),
-#                         c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         exp(-((x@data$t*exp(x@coef[3]))^exp(x@coef[2]))), tolerance=0.001)
+
 
   testthat::expect_warning(
     testthat::expect_warning(
@@ -116,13 +123,12 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(0.1348, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.06367, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1348, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.06367, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.09468, 62), tolerance=0.001)
 
-  # BUG
-  #testthat::expect_equal(v(predict(x, type="prob", distrx=c(0.13476, 0.06369762))),
-  #                       c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         pnorm(-(log(x@data$t)-x@coef[2])/exp(x@coef[3])), tolerance=0.001)
 
 
   # Date data
@@ -140,13 +146,12 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(68.41, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(29.46, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(68.41, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(29.46, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(42.50, 642), tolerance=0.001)
 
-#  BUG? As written function requires a date
-#  testthat::expect_equal(v(predict(x, type="prob", distrx=c(68.40503, 29.46044))),
-#                         c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         exp(-exp(x@coef[2])*x@data$rxdate), tolerance=0.001)
 
   testthat::expect_warning(
     x <- wtdttt(data = rd,
@@ -159,13 +164,12 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(86.00, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(67.85, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(86.00, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(67.85, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(3.037, 642), tolerance=0.001)
 
-# BUG? As written function requires a date
-#  testthat::expect_equal(v(predict(x, type="prob", distrx=c(86.00535, 67.85363))),
-#                         c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         exp(-((x@data$rxdate*exp(x@coef[3]))^exp(x@coef[2]))), tolerance=0.001)
 
   testthat::expect_warning(
     x <- wtdttt(data = rd,
@@ -178,13 +182,12 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(85.06, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(68.81, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(85.06, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(68.81, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(71.03, 642), tolerance=0.001)
 
-#  BUG? As written function requires a date
-#  testthat::expect_equal(v(predict(x, type="prob", distrx=c(85.05506, 68.81494))),
-#                         c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         pnorm(-(log(x@data$rxdate)-x@coef[2])/exp(x@coef[3])), tolerance=0.001)
 
   # reverse
 
@@ -199,13 +202,12 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(76.19, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(32.81, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(76.19, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(32.81, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(47.34, 642), tolerance=0.001)
 
-#  BUG? As written function requires a date
-#  testthat::expect_equal(v(predict(x, type="prob", distrx=c(76.18548, 32.8113))),
-#                         c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         exp(-exp(x@coef[2])*x@data$rxdate), tolerance=0.001)
 
   testthat::expect_warning(
     x <- wtdttt(data = rd,
@@ -218,13 +220,12 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(88.73, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(70.17, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(88.73, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(70.17, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(3.030, 642), tolerance=0.001)
 
-#  BUG? As written function requires a date
-#  testthat::expect_equal(v(predict(x, type="prob", distrx=c(88.72821, 70.16795))),
-#                         c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         exp(-((x@data$rxdate*exp(x@coef[3]))^exp(x@coef[2]))), tolerance=0.001)
 
   testthat::expect_warning(
     x <- wtdttt(data = rd,
@@ -237,12 +238,11 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)), rep(87.96, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(69.80, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)$Estimate), rep(87.96, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(69.80, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(72.49, 642), tolerance=0.001)
 
-#  BUG? As written function requires a date
-#  testthat::expect_equal(v(predict(x, type="prob", distrx=c(87.96276, 69.79998))),
-#                         c(0.2, 0.5), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         pnorm(-(log(x@data$rxdate)-x@coef[2])/exp(x@coef[3])), tolerance=0.001)
 
 })
