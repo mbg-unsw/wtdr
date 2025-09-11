@@ -8,7 +8,7 @@
 # * quantile=0.8, 0.5 DONE
 # * distrx=NULL
 # * prediction.data=NULL
-# * se.fit=c(FALSE, TRUE)
+# * se.fit=TRUE
 
 testthat::test_that("errors", {
 
@@ -33,8 +33,8 @@ testthat::test_that("predictions", {
     "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1402, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.06040, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(0.1402, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.06040, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.08713, 62), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -50,8 +50,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1168, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.03864, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(0.1168, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.03864, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.03087, 62), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -67,8 +67,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1348, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.06367, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(0.1348, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.06367, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.09468, 62), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -91,8 +91,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1402, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.06040, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(0.1402, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.06040, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.08713, 62), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -107,8 +107,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1168, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.03864, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(0.1168, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.03864, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.03087, 62), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -123,8 +123,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(0.1348, 62), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(0.06367, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(0.1348, 62), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.06367, 62), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.09468, 62), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -146,8 +146,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(68.41, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(29.46, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(68.41, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(29.46, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(42.50, 642), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -164,8 +164,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(86.00, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(67.85, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(86.00, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(67.85, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(3.037, 642), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -182,8 +182,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(85.06, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(68.81, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(85.06, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(68.81, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(71.03, 642), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -202,8 +202,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(76.19, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(32.81, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(76.19, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(32.81, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(47.34, 642), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -220,8 +220,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(88.73, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(70.17, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(88.73, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(70.17, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(3.030, 642), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
@@ -238,8 +238,8 @@ testthat::test_that("predictions", {
   "Some dates are out of the window"
   )
 
-  testthat::expect_equal(v(predict(x)$Estimate), rep(87.96, 642), tolerance=0.001)
-  testthat::expect_equal(v(predict(x, quantile=0.5)$Estimate), rep(69.80, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x)), rep(87.96, 642), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(69.80, 642), tolerance=0.001)
   testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(72.49, 642), tolerance=0.001)
 
   testthat::expect_equal(v(predict(x, type="prob")),
