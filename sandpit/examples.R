@@ -30,7 +30,7 @@ predict(fit1, type = "prob")
 
 dfn <- haven::read_dta(system.file("extdata", "wtddat_covar.dta", package="wtdr"))
 
-predict(fit1, type = "prob", prediction.data = dfn, distrx = "last_rxtime")
+predict(fit1, type = "prob", newdata = dfn, distrx = "last_rxtime")
 
 
 # repeat with Weibull
@@ -177,7 +177,7 @@ df <- df %>%
        arrange(packsize, distlast) %>%
        mutate(packsize = as.factor(packsize))
 
-prob_pred <- predict(fit1, type = "prob", prediction.data = df, distrx = "distlast")
+prob_pred <- predict(fit1, type = "prob", newdata = df, distrx = "distlast")
 
 # df <- df %>% arrange(packsize, distlast)
 # plot(df$distlast, prob_pred, type = "l", ylim = c(0,1))
@@ -199,7 +199,7 @@ fit1 <- wtdttt(data = df,
 df <- haven::read_dta(system.file("extdata", "lastRx_index.dta", package="wtdr"))
 
 df <- df %>% arrange(packsize, distlast)
-prob_pred <- predict(fit1, type = "prob", prediction.data = df, distrx = "distlast")
+prob_pred <- predict(fit1, type = "prob", newdata = df, distrx = "distlast")
 
 ggplot(data = df, aes(x=distlast, y=prob_pred, group = packsize)) +
   geom_line() +
@@ -258,7 +258,7 @@ df <- haven::read_dta(system.file("extdata", "lastRx_index.dta", package="wtdr")
 df <- df %>%
   mutate(packsize = as.factor(packsize))
 
-predict(fit1, quantile = 0.9, prediction.data = df)
+predict(fit1, quantile = 0.9, newdata = df)
 
 ### with more than one covariate (after having implemented model.frame in pred_dur_prob to extract var names) ----
 df <- haven::read_dta(system.file("extdata", "wtddat_covar.dta", package="wtdr"))
@@ -280,7 +280,7 @@ df <- df %>%
        mutate(packsize = as.factor(packsize),
               sex = as.factor(sample(c("F","M"), dim(df)[1], replace = T)))
 
-predict(fit1, quantile = 0.9, prediction.data = df)
+predict(fit1, quantile = 0.9, newdata = df)
 
 ### with different covariates in the estimation and prediction dataset (checking the error message) ----
 df <- haven::read_dta(system.file("extdata", "wtddat_covar.dta", package="wtdr"))
@@ -298,7 +298,7 @@ df <- haven::read_dta(system.file("extdata", "lastRx_index.dta", package="wtdr")
 df <- df %>% mutate(packsize = as.factor(packsize),
                     sex = as.factor(sample(c("F","M"), dim(df)[1], replace = T)))
 
-predict(fit1, quantile = 0.9, prediction.data = df)
+predict(fit1, quantile = 0.9, newdata = df)
 
 ### with a larger prediction dataset (multiple rows per subject) ----
 df <- haven::read_dta(system.file("extdata", "wtddat_covar.dta", package="wtdr"))
@@ -314,7 +314,7 @@ df <- haven::read_dta(system.file("extdata", "ranwtddat_discdates.dta", package=
 
 df <- df %>% mutate(packsize = as.factor(sample(c(100,200), dim(df)[1], replace = T)))
 
-predict(fit1, quantile = 0.9, prediction.data = df)
+predict(fit1, quantile = 0.9, newdata = df)
 
 
 ## try if the model without covariates matches stata results

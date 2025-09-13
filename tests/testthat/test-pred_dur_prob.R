@@ -7,8 +7,9 @@
 # * iadmean=c(FALSE, TRUE) DONE
 # * quantile=0.8, 0.5 DONE
 # * distrx=NULL
-# * prediction.data=NULL
+# * newdata=NULL
 # * se.fit=TRUE
+# * linear predictors
 
 testthat::test_that("errors", {
 

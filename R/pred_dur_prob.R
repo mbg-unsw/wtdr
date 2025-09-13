@@ -15,7 +15,7 @@ NULL
 #' The class of the covariate must be the same in the dataset used for estimation and in the one used for prediction - if different - i.e. packsize used as a factor.
 #'
 #' @param object a fitted object of class inheriting from "wtd"
-#' @param prediction.data An optional data frame in which to look for variables with
+#' @param newdata An optional data frame in which to look for variables with
 #' which to predict. If omitted, the fitted values are used.
 #' @param type "dur" or "prob". Default "dur".
 #' @param iadmean logical; if T, mean duration is predicted.
@@ -31,12 +31,12 @@ NULL
 #' @importFrom stats pnorm pweibull pexp setNames
 #' @importFrom Deriv Deriv
 setMethod("predict", "wtd",
-          function(object, prediction.data=NULL, type="dur", iadmean=F, distrx=NULL, quantile=0.8,
+          function(object, newdata=NULL, type="dur", iadmean=F, distrx=NULL, quantile=0.8,
                    se.fit=FALSE, na.action=na.pass, ...) {
 
 
       # 07.05.25
-      if(is.null(prediction.data)) {
+      if(is.null(newdata)) {
 
         datanew <- data.table(as.data.frame(object@data))
 
@@ -44,17 +44,17 @@ setMethod("predict", "wtd",
         distrx <- datanew[[distrxnew]]
 
 
-      } else if(!is.null(prediction.data) & is.null(distrx) & type=="dur") {
+      } else if(!is.null(newdata) & is.null(distrx) & type=="dur") {
 
-        datanew <- data.table(as.data.frame(prediction.data))
+        datanew <- data.table(as.data.frame(newdata))
 
-      } else if(!is.null(prediction.data) & is.null(distrx) & type=="prob"){
+      } else if(!is.null(newdata) & is.null(distrx) & type=="prob"){
 
         stop("Argument distrx is missing: specify the column name of the new dataset including dispensing gaps")
 
       } else {
 
-        datanew <- data.table(as.data.frame(prediction.data))
+        datanew <- data.table(as.data.frame(newdata))
 
         distrxnew <- datanew[,get(distrx)]
         distrx <- distrxnew
@@ -93,13 +93,13 @@ setMethod("predict", "wtd",
               vpos[[vname]] <- which(parnames_din==vname)
             }
 
-            if (!is.null(prediction.data)) {
+            if (!is.null(newdata)) {
 
               for (i in seq_along(parnames)) {
 
                 if (length(labels(terms(as.formula(parm_form[i]))))!=0) {
 
-                  if ((sum(!labels(terms(as.formula(parm_form[i]))) %in% names(prediction.data)==T)) >=1) {
+                  if ((sum(!labels(terms(as.formula(parm_form[i]))) %in% names(newdata)==T)) >=1) {
 
                     stop("Covariates used in the estimation are not in the prediction dataset (new data)")
 
@@ -285,7 +285,7 @@ setMethod("predict", "wtd",
 
 
                       # vector as output
-                      out <- list(Estimate = round(dur_num_v,7), SE = se_dur)
+                      out <- list(fit = round(dur_num_v,7), se.fit = se_dur)
                     } else
                       out <- round(dur_num_v,7)
 
@@ -316,13 +316,13 @@ setMethod("predict", "wtd",
                 vec <- list(mm_names_1, mm_names_2, mm_names_3)
                 mm_names <- data.frame(vec[check])
 
-                if (!is.null(prediction.data)) {
+                if (!is.null(newdata)) {
 
                 for (i in seq_along(parnames)) {
 
                   if (length(labels(terms(as.formula(parm_form[i]))))!=0) {
 
-                    if ((sum(!labels(terms(as.formula(parm_form[i]))) %in% names(prediction.data)==T)) >=1) {
+                    if ((sum(!labels(terms(as.formula(parm_form[i]))) %in% names(newdata)==T)) >=1) {
 
                       stop("Covariates used in the estimation are not in the prediction dataset (new data)")
 
@@ -485,7 +485,7 @@ setMethod("predict", "wtd",
                       se_dur <- sqrt(rowSums((dpart_m %*% vcov_sel) * dpart_m))
 
                       # vector as output
-                      out <- list(Estimate = round(dur_num_v,7), SE = se_dur)
+                      out <- list(fit = round(dur_num_v,7), se.fit = se_dur)
                     } else
                       out <- round(dur_num_v, 7)
 
@@ -518,13 +518,13 @@ setMethod("predict", "wtd",
                 vec <- list(mm_names_1, mm_names_2)
                 mm_names <- data.frame(vec[check])
 
-                if (!is.null(prediction.data)) {
+                if (!is.null(newdata)) {
 
                 for (i in seq_along(parnames)) {
 
                   if (length(labels(terms(as.formula(parm_form[i]))))!=0) {
 
-                    if ((sum(!labels(terms(as.formula(parm_form[i]))) %in% names(prediction.data)==T)) >=1) {
+                    if ((sum(!labels(terms(as.formula(parm_form[i]))) %in% names(newdata)==T)) >=1) {
 
                       stop("Covariates used in the estimation are not in the prediction dataset (new data)")
 
@@ -641,7 +641,7 @@ setMethod("predict", "wtd",
                       se_dur <- sqrt(rowSums((dpart_m %*% vcov_sel) * dpart_m))
 
                       # vector as output
-                      out <- list(Estimate = round(dur_num_v,7), SE = se_dur)
+                      out <- list(fit = round(dur_num_v,7), se.fit = se_dur)
                     } else
                       out <- round(dur_num_v,7)
 
