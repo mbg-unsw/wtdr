@@ -40,6 +40,8 @@ sand_vcov <- function(fit) {
     }
 
 
+    # browser()
+
     if(fit@dist=="lnorm") {
 
       mm1 <- model.matrix(formula(models[vpos[["logitp"]]]), data=as.data.frame(fit@data), drop=F)
@@ -52,12 +54,34 @@ sand_vcov <- function(fit) {
       myenv$lnsigma <- mm3%*% fit@coef[(ncol(mm1)+ncol(mm2)+1):(ncol(mm1)+ncol(mm2)+ncol(mm3))]
       myenv$x <- as.numeric(getElement(fit@data, fit@depvar))
 
-      sc1 <- diag(attr(numericDeriv(
-        quote(dlnorm(x, logitp, mu, lnsigma, delta = fit@delta, log=T)), c("logitp"), myenv), "gradient"))
-      sc2 <- diag(attr(numericDeriv(
-        quote(dlnorm(x, logitp, mu, lnsigma, delta = fit@delta, log=T)), c("mu"), myenv), "gradient"))
-      sc3 <- diag(attr(numericDeriv(
-        quote(dlnorm(x, logitp, mu, lnsigma, delta = fit@delta, log=T)), c("lnsigma"), myenv), "gradient"))
+      rm(mm1, mm2, mm3)
+
+      fun_logitp <- function(logitp) {
+
+        dlnorm(myenv$x, logitp, myenv$mu, myenv$lnsigma, delta = fit@delta, log=T)
+
+      }
+
+      fun_mu <- function(mu) {
+
+        dlnorm(myenv$x, myenv$logitp, mu, myenv$lnsigma, delta = fit@delta, log=T)
+
+      }
+
+      fun_lnsigma <- function(lnsigma) {
+
+        dlnorm(myenv$x, myenv$logitp, myenv$mu, lnsigma, delta = fit@delta, log=T)
+
+      }
+
+
+      sc1 <- numDeriv::grad(fun_logitp, myenv$logitp)
+      sc2 <- numDeriv::grad(fun_mu, myenv$mu)
+      sc3 <- numDeriv::grad(fun_lnsigma, myenv$lnsigma)
+
+      mm1 <- model.matrix(formula(models[vpos[["logitp"]]]), data=as.data.frame(fit@data), drop=F)
+      mm2 <- model.matrix(formula(models[vpos[["mu"]]]), data=as.data.frame(fit@data), drop=F)
+      mm3 <- model.matrix(formula(models[vpos[["lnsigma"]]]), data=as.data.frame(fit@data), drop=F)
 
       score_mat <- cbind(mm1 * sc1, mm2 * sc2, mm3 * sc3)
 

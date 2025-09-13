@@ -1,8 +1,15 @@
-* convert example datasets into R format
+* clean up documentation [CRAN]
+* convert example datasets into R format [CRAN]
 * back transform data to original date range for plot method
-* improve plot output for plot method
+* improve plot output for plot method [CRAN]
 * speed up robust variance estimator
 * benchmark and optimise
+* don't mask dexp() and dlnorm() [CRAN, #13]
+* rename dweib() to dweibull() [CRAN, #14]
+* add NEWS [CRAN]
+* add a vignette [CRAN]
+* check https://github.com/DavisVaughan/extrachecks [CRAN]
+* create a pkgdown webpage
 * add test cases for:
 - wtdttt(..., na.action=)
 - ranwtdttt(..., na.action=)

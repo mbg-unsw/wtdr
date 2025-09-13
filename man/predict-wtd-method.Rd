@@ -6,7 +6,7 @@
 \usage{
 \S4method{predict}{wtd}(
   object,
-  prediction.data = NULL,
+  newdata = NULL,
   type = "dur",
   iadmean = F,
   distrx = NULL,
@@ -19,7 +19,7 @@
 \arguments{
 \item{object}{a fitted object of class inheriting from "wtd"}
 
-\item{prediction.data}{An optional data frame in which to look for variables with
+\item{newdata}{An optional data frame in which to look for variables with
 which to predict. If omitted, the fitted values are used.}
 
 \item{type}{"dur" or "prob". Default "dur".}

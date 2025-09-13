@@ -33,9 +33,9 @@ model specification are given under 'Details'}
 
 \item{parameters}{model formulae for distribution parameters}
 
-\item{start}{start of observation window}
+\item{start}{start of the sampling window within which random index date(s) are sampled}
 
-\item{end}{end of observation window}
+\item{end}{end of the sampling window within which random index date(s) are sampled}
 
 \item{reverse}{logical; Fit the reverse waiting time distribution.}
 
