@@ -25,7 +25,9 @@ Imports:
     stats
 Suggests: 
     testthat (>= 3.0.0),
-    haven
+    haven,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
@@ -41,3 +43,4 @@ Collate:
     'summary_wtd-class.R'
     'summaryWtd.R'
     'wtdr-package.R'
+VignetteBuilder: knitr

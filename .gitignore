@@ -50,3 +50,4 @@ rsconnect/
 
 # Rd2pdf temp files
 .Rd2pdf*/
+inst/doc
