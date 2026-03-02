@@ -22,13 +22,13 @@ library(wtdr)
 ```
 Contact:
 
-Professor Henrik Støvring
+Dr Malcolm B. Gillies
 
-Department of Biomedicine,
+School of Population Health
 
-Aarhus University, Aarhus, Denmark
+UNSW Sydney, Australia
 
-stovring@ph.au.dk
+malcolm.gillies@unsw.edu.au
 
 
 # Purpose
