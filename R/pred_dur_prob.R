@@ -114,9 +114,12 @@ setMethod("predict", "wtd",
             # Lognormal distribution
             if(object@dist=="lnorm") {
 
-              mm1 <- model.matrix(formula(models[vpos[["logitp"]]]), data=datanew)
-              mm2 <- model.matrix(formula(models[vpos[["mu"]]]), data=datanew)
-              mm3 <- model.matrix(formula(models[vpos[["lnsigma"]]]), data=datanew)
+              mm1 <- model.matrix(formula(models[vpos[["logitp"]]]),
+                                  data=model.frame(~ ., datanew, na.action=na.pass))
+              mm2 <- model.matrix(formula(models[vpos[["mu"]]]),
+                                  data=model.frame(~ ., datanew, na.action=na.pass))
+              mm3 <- model.matrix(formula(models[vpos[["lnsigma"]]]),
+                                  data=model.frame(~ ., datanew, na.action=na.pass))
 
               mm_names_1 <- model.frame(formula(models[vpos[["logitp"]]]), data=datanew)
               mm_names_2 <- model.frame(formula(models[vpos[["mu"]]]), data=datanew)
@@ -304,9 +307,12 @@ setMethod("predict", "wtd",
 
             } else if(object@dist=="weib") {
 
-                mm1 <- model.matrix(formula(models[vpos[["logitp"]]]), data=datanew)
-                mm2 <- model.matrix(formula(models[vpos[["lnalpha"]]]), data=datanew)
-                mm3 <- model.matrix(formula(models[vpos[["lnbeta"]]]), data=datanew)
+                mm1 <- model.matrix(formula(models[vpos[["logitp"]]]),
+                                    data=model.frame(~ ., datanew, na.action=na.pass))
+                mm2 <- model.matrix(formula(models[vpos[["lnalpha"]]]),
+                                    data=model.frame(~ ., datanew, na.action=na.pass))
+                mm3 <- model.matrix(formula(models[vpos[["lnbeta"]]]),
+                                    data=model.frame(~ ., datanew, na.action=na.pass))
 
                 mm_names_1 <- model.frame(formula(models[vpos[["logitp"]]]), data=datanew)
                 mm_names_2 <- model.frame(formula(models[vpos[["lnalpha"]]]), data=datanew)
@@ -508,8 +514,10 @@ setMethod("predict", "wtd",
               # Exponential distribution
             } else if(object@dist=="exp") {
 
-                mm1 <- model.matrix(formula(models[vpos[["logitp"]]]), data=datanew)
-                mm2 <- model.matrix(formula(models[vpos[["lnbeta"]]]), data=datanew)
+                mm1 <- model.matrix(formula(models[vpos[["logitp"]]]),
+                                    data=model.frame(~ ., datanew, na.action=na.pass))
+                mm2 <- model.matrix(formula(models[vpos[["lnbeta"]]]),
+                                    data=model.frame(~ ., datanew, na.action=na.pass))
 
                 mm_names_1 <- model.frame(formula(models[vpos[["logitp"]]]), data=datanew)
                 mm_names_2 <- model.frame(formula(models[vpos[["lnbeta"]]]), data=datanew)
