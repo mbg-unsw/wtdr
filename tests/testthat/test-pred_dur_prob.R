@@ -8,6 +8,8 @@
 # * quantile=0.8, 0.5 DONE
 # * distrx=NULL
 # * newdata=NULL
+# * newdata and type="prob"
+# * complete all cases for newdata with NA
 # * se.fit=TRUE
 # * linear predictors
 
@@ -247,3 +249,179 @@ testthat::test_that("predictions", {
                          pnorm(-(log(x@data$rxdate)-x@coef[2])/exp(x@coef[3])), tolerance=0.001)
 
 })
+
+testthat::test_that("linear predictors", {
+
+  dt_coef <- readRDS(test_path("fixtures", "dt_coef.rds"))
+  dt_coef$packsize <- factor(dt_coef$packsize) # work around issue #33
+  dt_coef$sex <- factor(dt_coef$sex)
+
+  nn<-data.frame(packsize=factor(c("100", "200")), sex=factor(c("M", "F")))
+  nn2<-data.frame(packsize=factor(c("100", "200", NA)), sex=factor(c("M", "F", NA)))
+
+  testthat::expect_warning(
+    x <- wtdttt(dt_coef, form = last_rxtime ~ dexp(logitp, lnbeta),
+                parameters = list(logitp ~ packsize),
+                start=0, end=1, reverse=T),
+    "The id variable was not provided"
+  )
+
+  testthat::expect_equal(v(predict(x)), rep(0.2192, 1000), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)), rep(0.09441, 1000),
+                         tolerance=0.001)
+  testthat::expect_equal(v(predict(x, iadmean=TRUE)), rep(0.1362, 1000),
+                         tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         v(exp(-exp(x@coef[3])*x@data$last_rxtime)),
+                         tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, newdata=nn)), rep(0.2192, 2), tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, newdata=nn2)), rep(0.2192, 3), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, newdata=nn2, na.action=na.omit)), rep(0.2192, 2), tolerance=0.001)
+
+  testthat::expect_warning(
+    x <- wtdttt(dt_coef, form = last_rxtime ~ dexp(logitp, lnbeta),
+                parameters = list(lnbeta ~ packsize),
+                start=0, end=1, reverse=T),
+    "The id variable was not provided"
+  )
+
+  testthat::expect_equal(v(predict(x)),
+                         ifelse(x@data$packsize==200, 0.2479, 0.1822),
+                         tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)),
+                         ifelse(x@data$packsize==200, 0.1067, 0.07847),
+                         tolerance=0.001)
+  testthat::expect_equal(v(predict(x, iadmean=TRUE)),
+                         ifelse(x@data$packsize==200, 0.1540, 0.1132),
+                         tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         v(exp(-exp(x@coef[2]+ifelse(x@data$packsize==200, x@coef[3], 0))*x@data$last_rxtime)), tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, newdata=nn)), c(0.1822, 0.2479), tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, newdata=nn2)), c(0.1822, 0.2479, NA), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, newdata=nn2, na.action=na.omit)), c(0.1822, 0.2479), tolerance=0.001)
+
+  testthat::expect_warning(
+    x <- wtdttt(dt_coef, form = last_rxtime ~ dexp(logitp, lnbeta),
+                parameters = list(logitp ~ packsize, lnbeta ~ packsize),
+                start=0, end=1, reverse=T),
+    "The id variable was not provided"
+  )
+
+  testthat::expect_equal(v(predict(x)),
+                         ifelse(x@data$packsize==200, 0.2596, 0.1762),
+                         tolerance=0.001)
+  testthat::expect_equal(v(predict(x, quantile=0.5)),
+                         ifelse(x@data$packsize==200, 0.1118, 0.0759),
+                         tolerance=0.001)
+  testthat::expect_equal(v(predict(x, iadmean=TRUE)),
+                         ifelse(x@data$packsize==200, 0.1613, 0.1095),
+                         tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, type="prob")),
+                         v(exp(-exp(x@coef[3]+ifelse(x@data$packsize==200, x@coef[4], 0))*x@data$last_rxtime)), tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, newdata=nn)), c(0.1762, 0.2596), tolerance=0.001)
+
+  testthat::expect_equal(v(predict(x, newdata=nn2)), c(0.1762, 0.2596, NA), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, newdata=nn2, na.action=na.omit)), c(0.1762, 0.2596), tolerance=0.001)
+
+#   # repeat for dweib
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dweib(logitp, lnalpha, lnbeta),
+#                 parameters = list(logitp ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dweib(logitp, lnalpha, lnbeta),
+#                 parameters = list(lnalpha ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dweib(logitp, lnalpha, lnbeta),
+#                 parameters = list(lnbeta ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dweib(logitp, lnalpha, lnbeta),
+#                 parameters = list(lnalpha ~ packsize, lnbeta ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dlnorm(logitp, mu, lnsigma),
+#                 parameters = list(logitp ~ packsize, lnsigma ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dlnorm(logitp, mu, lnsigma),
+#                 parameters = list(logitp ~ packsize, mu ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dlnorm(logitp, mu, lnsigma),
+#                 parameters = list(mu ~ packsize, lnsigma ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dlnorm(logitp, mu, lnsigma),
+#                 parameters = list(mu ~ packsize, lnsigma ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dlnorm(logitp, mu, lnsigma),
+#                 parameters = list(logitp ~ packsize, mu ~ packsize, lnsigma ~ packsize),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+#
+#   testthat::expect_warning(
+#     x <- wtdttt(dt_coef, form = last_rxtime ~ dlnorm(logitp, mu, lnsigma),
+#                 parameters = list(logitp ~ sex, mu ~ sex + log(packsize)),
+#                 start=0, end=1, reverse=T),
+#     "The id variable was not provided"
+#   )
+#
+# # XXXX
+
+})
+
