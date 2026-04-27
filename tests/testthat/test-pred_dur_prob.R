@@ -258,6 +258,8 @@ testthat::test_that("linear predictors", {
 
   nn<-data.frame(packsize=factor(c("100", "200")), sex=factor(c("M", "F")))
   nn2<-data.frame(packsize=factor(c("100", "200", NA)), sex=factor(c("M", "F", NA)))
+  nn3<-data.frame(packsize=factor(c("100", "200", NA)), sex=factor(c("M", "F", NA)),
+                  tt=c(0.1,0.15,0.2))
 
   testthat::expect_warning(
     x <- wtdttt(dt_coef, form = last_rxtime ~ dexp(logitp, lnbeta),
@@ -280,6 +282,9 @@ testthat::test_that("linear predictors", {
 
   testthat::expect_equal(v(predict(x, newdata=nn2)), rep(0.2192, 3), tolerance=0.001)
   testthat::expect_equal(v(predict(x, newdata=nn2, na.action=na.omit)), rep(0.2192, 2), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, newdata=nn3, type="prob", distrx="tt")), c(0.4799, 0.3324, 0.2303), tolerance=0.001)
+# BUG
+# testthat::expect_equal(v(predict(x, newdata=nn3, type="prob", distrx="tt", na.action=na.omit)), ?????, tolerance=0.001)
 
   testthat::expect_warning(
     x <- wtdttt(dt_coef, form = last_rxtime ~ dexp(logitp, lnbeta),
@@ -305,6 +310,9 @@ testthat::test_that("linear predictors", {
 
   testthat::expect_equal(v(predict(x, newdata=nn2)), c(0.1822, 0.2479, NA), tolerance=0.001)
   testthat::expect_equal(v(predict(x, newdata=nn2, na.action=na.omit)), c(0.1822, 0.2479), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, newdata=nn3, type="prob", distrx="tt")), c(0.4134, 0.3776, NA), tolerance=0.001)
+# BUG
+# testthat::expect_equal(v(predict(x, newdata=nn3, type="prob", distrx="tt", na.action=na.omit)), ?????, tolerance=0.001)
 
   testthat::expect_warning(
     x <- wtdttt(dt_coef, form = last_rxtime ~ dexp(logitp, lnbeta),
@@ -330,6 +338,9 @@ testthat::test_that("linear predictors", {
 
   testthat::expect_equal(v(predict(x, newdata=nn2)), c(0.1762, 0.2596, NA), tolerance=0.001)
   testthat::expect_equal(v(predict(x, newdata=nn2, na.action=na.omit)), c(0.1762, 0.2596), tolerance=0.001)
+  testthat::expect_equal(v(predict(x, newdata=nn3, type="prob", distrx="tt")), c(0.4012, 0.3945, NA), tolerance=0.001)
+# BUG
+# testthat::expect_equal(v(predict(x, newdata=nn3, type="prob", distrx="tt", na.action=na.omit)), ?????, tolerance=0.001)
 
 #   # repeat for dweib
 #
