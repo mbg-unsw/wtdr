@@ -16,12 +16,41 @@
 library(haven)        # read_dta()
 library(data.table)   # fast data manipulation
 library(wtdr)         # ranwtdttt(), at_ranwtdttt() – load package or source files below
+library(bbmle)
 
 ## If wtdr is not yet installed, source the individual files instead:
-# source("R/wtd-class.R")
-# source("R/wtdttt.R")
-# source("R/ranwtdttt.R")
-# source("at_ranwtdttt.R")
+#(HS: I could not make it work without these uncommented?)
+source("R/wtd-class.R")
+source("R/wtdttt.R")
+source("R/ranwtdttt.R")
+source("R/sandwich.R")
+source("sandpit/at_ranwtdttt.R")
+
+## ---------------------------------------------------------------------------
+## Path setup
+## Directory layout assumed:
+##   wtdr/
+##     sandpit/          <- this script lives here
+##     inst/extdata/     <- drugpakud.dta lives here
+##
+## pkg_root resolves to the wtdr package root (one level above sandpit/).
+## All file paths are built from pkg_root so the script works regardless of
+## the working directory, as long as it is sourced from within the wtdr tree.
+## ---------------------------------------------------------------------------
+
+#(HS: perhaps something easier could be done here?)
+pkg_root <- normalizePath(file.path(
+  dirname(tryCatch(
+    normalizePath(sys.frame(1)$ofile, mustWork = TRUE),
+    error = function(e) file.path(getwd(), "dummy.R")   # fallback for interactive use
+  )),
+  "."
+))
+
+## Sanity-check: confirm we resolved to the wtdr package root
+stopifnot(basename(pkg_root) == "wtdr")
+
+data_file <- file.path(pkg_root, "inst", "extdata", "drugpakud.dta")
 
 set.seed(42)   # reproducibility
 
@@ -29,7 +58,7 @@ set.seed(42)   # reproducibility
 # 1. Load and prepare data
 # =============================================================================
 
-df <- as.data.table(read_dta("drugpakud.dta"))
+df <- as.data.table(read_dta(data_file))
 
 ## Keep only the ATC code of interest and the two variables used in estimation
 df <- df[atc == "N06AB06", .(id, rxdate)]
@@ -205,6 +234,7 @@ compare <- data.frame(
   RAN_Estimate= coef_ran[params, "Estimate"],
   RAN_SE      = coef_ran[params, "Std. Error"],
   Diff        = coef_at [params, "Estimate"] - coef_ran[params, "Estimate"],
+  SE_gain     = (coef_at [params, "Std. Error"] - coef_ran[params, "Std. Error"]) / coef_ran[params, "Std. Error"] *100,
   row.names   = NULL
 )
 
@@ -216,5 +246,6 @@ cat("Notes:\n")
 cat("  AT  = at_ranwtdttt (antithetic sampling, nint = 5, 10 index dates/person)\n")
 cat("  RAN = ranwtdttt    (independent sampling, nsamp = 10, 10 index dates/person)\n")
 cat("  Diff = AT_Estimate - RAN_Estimate\n")
+cat("  SE_gain = % reduction in SE (AT vs RAN)")
 cat("  Estimates should be similar; SE differences reflect variance-reduction\n")
 cat("  from antithetic sampling.\n")
