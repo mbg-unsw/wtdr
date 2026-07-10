@@ -79,8 +79,8 @@ ranwtdttt <- function(data, form, parameters=NULL, start=NA, end=NA, reverse=F, 
 
   # creation of shifted dates
 
-  if(!is(data[[obs.name]], "Date") || !is(start, "Date") || !is(end, "Date"))
-    stop(paste0("variables start, end and '", obs.name, "' must be all of class Date"))
+  # if(!is(data[[obs.name]], "Date") || !is(start, "Date") || !is(end, "Date"))
+  #   stop(paste0("variables start, end and '", obs.name, "' must be all of class Date"))
 
   delta <- as.numeric(end - start)
 
