@@ -1,7 +1,7 @@
 Type: Package
 Package: wtdr
 Title: Parametric Waiting Time Distribution estimation
-Version: 0.8.0
+Version: 0.9.0
 Author: Sabrina Giometto, Malcolm Gillies, Olga Paoletti, Henrik Støvring
 Maintainer: Henrik Støvring <hersto@rm.dk>
 Description: Estimation of prescription durations and treatment
