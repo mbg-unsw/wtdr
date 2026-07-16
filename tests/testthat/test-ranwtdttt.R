@@ -34,12 +34,12 @@ testthat::test_that("errors", {
 
   testthat::expect_error(
     ranwtdttt(data.frame(rx1time=c(1)), form = rx1time ~ dlnorm(logitp, mu, lnsigma), start=as.Date("2023-01-01"), end=as.Date("2024-01-01")),
-    "must be all of class Date"
+    "variables start, end and 'rx1time' must be either all of class Date or all of class numeric"
   )
 
   testthat::expect_error(
     ranwtdttt(data.frame(rx1time=as.Date("2024-01-01")), form = rx1time ~ dlnorm(logitp, mu, lnsigma), start=0, end=1),
-    "must be all of class Date"
+    "variables start, end and 'rx1time' must be either all of class Date or all of class numeric"
   )
 
   testthat::expect_error(
