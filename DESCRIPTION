@@ -1,7 +1,7 @@
 Type: Package
 Package: wtdr
 Title: Parametric Waiting Time Distribution estimation
-Version: 0.7.0
+Version: 0.9.0
 Author: Sabrina Giometto, Malcolm Gillies, Olga Paoletti, Henrik Støvring
 Maintainer: Henrik Støvring <hersto@rm.dk>
 Description: Estimation of prescription durations and treatment
@@ -31,7 +31,7 @@ Suggests:
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 Collate: 
     'dfunctions.R'
     'wtd-class.R'

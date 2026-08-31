@@ -20,8 +20,8 @@ NULL
 #' not found in data, the variables are taken from environment(formula),
 #' typically the environment from which wtdttt is called.
 #' @param id the name of the variable that identifies distinct individuals
-#' @param start start of the sampling window within which random index date(s) are sampled
-#' @param end end of the sampling window within which random index date(s) are sampled
+#' @param start start of the sampling window within which random index value(s) are sampled (date or integer)
+#' @param end end of the sampling window within which random index value(s) are sampled (date or integer)
 #' @param reverse logical; Fit the reverse waiting time distribution.
 #' @param nsamp number of samples to take.
 #' @param subset an optional vector specifying a subset of observations to be
@@ -75,12 +75,16 @@ ranwtdttt <- function(data, form, parameters=NULL, start=NA, end=NA, reverse=F, 
 
   data <- na.action(data, cols = c(obs.name, covar.names))
 
-  ##
+  # check data
+
+  if(!(is(data[[obs.name]], "Date") && is(start, "Date") && is(end, "Date"))
+   && !(is(data[[obs.name]], "numeric") && is(start, "numeric") && is(end, "numeric")))
+  stop(paste0("variables start, end and '", obs.name, "' must be either all of class Date or all of class numeric"))
+
+  if(is(data[[obs.name]], "numeric"))
+     warning("numeric data are assumed to be integer-valued")
 
   # creation of shifted dates
-
-  if(!is(data[[obs.name]], "Date") || !is(start, "Date") || !is(end, "Date"))
-    stop(paste0("variables start, end and '", obs.name, "' must be all of class Date"))
 
   delta <- as.numeric(end - start)
 
